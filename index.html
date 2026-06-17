@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Threxio Versión 2.2 - Nuevas funcionalidades en estrategia de cobranza, pagos múltiples en dispositivos móviles y mejoras en permisos de exportación.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+:root{
+  --negro:#162227;--negro-2:#365461;--negro-3:#57869A;--negro-4:#0D171B;
+  --verde:#C6E348;--verde-lt:#E9F4B7;--blanco:#fff;
+  --azul:#8AB0C8;--gris:#B8CFDE;--coral:#B1F8F2;
+  --bd:rgba(255,255,255,.07);--bdv:rgba(198,227,72,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;font-weight:300;background:var(--negro);color:var(--blanco);line-height:1.65;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--negro-4);}::-webkit-scrollbar-thumb{background:var(--verde);border-radius:2px;}
+.topnav{position:sticky;top:0;z-index:200;background:rgba(22,34,39,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:48px;gap:16px;}
+.nav-logo{font-weight:500;font-size:1.1rem;letter-spacing:-.3px;flex-shrink:0;text-decoration:none;color:inherit;}
+.nav-links{display:flex;gap:0;flex:1;justify-content:center;flex-wrap:wrap;}
+.nav-links a{font-size:10px;font-weight:400;letter-spacing:2.5px;text-transform:uppercase;color:var(--negro-3);text-decoration:none;padding:6px 22px;border-radius:2px;transition:color .2s;}
+.nav-links a:hover{color:var(--verde);background:rgba(198,227,72,.06);}
+.hero{position:relative;overflow:hidden;padding:96px 60px 108px;text-align:center;border-bottom:1px solid var(--bd);}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 120%,rgba(198,227,72,.07),transparent 70%),radial-gradient(ellipse 80% 40% at 80% -10%,rgba(138,176,200,.05),transparent 60%);}
+.hero-label{display:inline-flex;align-items:center;gap:8px;font-weight:400;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--verde);border:1px solid var(--bdv);padding:5px 18px;border-radius:999px;margin-bottom:32px;}
+.hero-label::before{content:'';width:5px;height:5px;background:var(--verde);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.5);}}
+.hero h1{font-weight:500;font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.1;letter-spacing:-1.5px;margin-bottom:24px;}
+.hero h1 em{font-style:normal;color:var(--verde);}
+.hero-sub{font-weight:300;font-size:1.05rem;color:var(--gris);max-width:640px;margin:0 auto 44px;line-height:1.7;}
+.hero-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hpill{font-size:11px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;padding:7px 18px;border-radius:999px;border:1px solid var(--bd);color:var(--negro-3);text-decoration:none;transition:all .2s;}
+.hpill:hover{border-color:var(--bdv);color:var(--verde);}
+.hpill-hl{border-color:var(--bdv);color:var(--verde);}
+.wrap{max-width:1140px;margin:0 auto;padding:0 48px;}
+.portal-block{border-bottom:1px solid var(--bd);}
+.portal-header{padding:68px 0 22px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;border-bottom:2px solid var(--verde);}
+.portal-num{font-size:3rem;font-weight:500;color:var(--verde);letter-spacing:-2px;line-height:1;margin-bottom:6px;}
+.portal-header h2{font-weight:500;font-size:clamp(1.5rem,2.3vw,2rem);letter-spacing:-.3px;line-height:1.2;}
+.portal-header p{font-size:.84rem;font-weight:300;color:var(--negro-3);margin-top:4px;}
+.portal-count{font-size:11px;font-weight:300;letter-spacing:1px;color:var(--negro-3);text-align:right;}
+.portal-count strong{display:block;font-weight:500;font-size:2.6rem;color:rgba(198,227,72,.2);letter-spacing:-2px;line-height:1;}
+.portal-content{padding-bottom:68px;}
+.sum-box{background:rgba(198,227,72,.04);border:1px solid var(--bdv);padding:18px 22px;margin:22px 0 8px;display:flex;gap:14px;align-items:flex-start;font-size:.875rem;font-weight:300;color:var(--verde-lt);line-height:1.7;}
+.sum-icon{color:var(--verde);flex-shrink:0;font-size:1.1rem;margin-top:2px;}
+.acc{margin-top:10px;border:1px solid var(--bd);overflow:hidden;}
+.acc-btn{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;text-align:left;gap:14px;transition:background .2s;min-height:64px;box-sizing:border-box;}
+.acc-btn:hover{background:rgba(255,255,255,.025);}
+.acc-btn.open{background:rgba(198,227,72,.04);}
+.acc-left{display:flex;align-items:center;gap:13px;flex:1;min-width:0;}
+.atag{font-size:9px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:999px;flex-shrink:0;white-space:nowrap;}
+.tag-new{background:rgba(198,227,72,.1);color:var(--verde);border:1px solid var(--bdv);}
+.tag-imp{background:rgba(177,248,242,.07);color:var(--coral);border:1px solid rgba(177,248,242,.18);}
+.tag-sec{background:rgba(138,176,200,.07);color:var(--azul);border:1px solid rgba(138,176,200,.18);}
+.acc-titles{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+.acc-title{display:block;font-weight:500;font-size:.9rem;color:var(--blanco);line-height:1.35;}
+.acc-sub{display:block;font-size:.76rem;font-weight:300;color:var(--negro-3);margin-top:3px;line-height:1.3;}
+.acc-chev{flex-shrink:0;width:24px;height:24px;border:1px solid var(--bd);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .3s,border-color .3s,background .3s;}
+.acc-btn.open .acc-chev{transform:rotate(180deg);border-color:var(--bdv);background:rgba(198,227,72,.08);}
+.acc-chev svg{width:12px;height:12px;stroke:var(--verde);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.acc-body{display:none;padding:24px 28px 20px;border-top:1px solid var(--bd);background:rgba(255,255,255,.01);}
+.acc-body.open{display:block;}
+.acc-body > p.itext{margin-top:0;margin-bottom:12px;}
+.acc-body > ul.dots{margin-top:0;margin-bottom:12px;}
+.acc-body > ol.steps{margin-top:0;margin-bottom:12px;}
+.acc-body > .note-box{margin-top:12px;margin-bottom:12px;}
+.acc-body > .igallery{margin-top:16px;margin-bottom:0;}
+.acc-body > *:first-child{margin-top:0 !important;}
+.acc-body > *:last-child{margin-bottom:0 !important;}
+.itext{font-size:.875rem;font-weight:300;color:var(--gris);line-height:1.72;margin-bottom:12px;}
+.dots{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
+.dots li{display:flex;gap:9px;align-items:flex-start;font-size:.855rem;font-weight:300;color:var(--gris);line-height:1.6;}
+.dots li > span.dot{width:4px;height:4px;background:var(--verde);border-radius:50%;flex-shrink:0;margin-top:7px;}
+.dots li > span:last-child{flex:1;}
+.steps{list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:s;margin-bottom:12px;}
+.steps li{display:flex;gap:11px;align-items:flex-start;font-size:.855rem;font-weight:300;color:var(--gris);counter-increment:s;line-height:1.6;}
+.steps li::before{content:counter(s);display:flex;align-items:center;justify-content:center;width:18px;height:18px;min-width:18px;border:1px solid var(--bdv);border-radius:50%;font-size:9px;color:var(--verde);margin-top:2px;flex-shrink:0;}
+.note-box{background:rgba(198,227,72,.04);border:1px solid var(--bdv);padding:14px 18px;font-size:.84rem;font-weight:300;color:var(--verde-lt);margin:12px 0;line-height:1.65;}
+.igallery{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.igallery.row{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;}
+.igallery.mobile{display:flex;flex-direction:row;flex-wrap:nowrap;gap:12px;align-items:flex-start;margin-top:16px;}
+.igallery.mobile .ifig{flex:0 0 auto;width:180px;max-width:180px;}
+.igallery.mobile .ithumb{width:180px;height:320px;}
+.igallery.mobile .ithumb img{width:180px;height:320px;max-width:180px;object-fit:cover;object-position:top;}
+.igallery.mobile figcaption.img-cap{max-width:180px;font-size:.68rem;text-align:center;}
+.ifig{display:flex;flex-direction:column;gap:5px;max-width:280px;margin:0;padding:0;}
+.ithumb{cursor:zoom-in;overflow:hidden;border:1px solid var(--bd);background:rgba(0,0,0,.2);position:relative;line-height:0;transition:border-color .2s;}
+.ithumb:hover{border-color:var(--bdv);}
+.ithumb img{display:block;height:150px;width:auto;max-width:280px;object-fit:contain;transition:transform .25s;}
+.ithumb:hover img{transform:scale(1.03);}
+.zoom-hint{position:absolute;top:6px;right:7px;background:rgba(22,34,39,.9);border:1px solid var(--bdv);color:var(--verde);font-size:9px;font-weight:400;padding:2px 6px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;}
+.ithumb:hover .zoom-hint{opacity:1;}
+figcaption.img-cap,p.img-cap{font-size:.7rem;font-weight:300;color:var(--negro-3);line-height:1.4;text-align:center;max-width:280px;margin:0;}
+.lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(13,23,27,.97);align-items:center;justify-content:center;padding:20px;}
+.lightbox.active{display:flex;}
+.lb-inner{position:relative;max-width:92vw;max-height:92vh;}
+.lb-inner img{max-width:92vw;max-height:88vh;object-fit:contain;border:1px solid var(--bdv);display:block;}
+.lb-close{position:fixed;top:14px;right:18px;background:rgba(22,34,39,.9);border:1px solid var(--bdv);color:var(--verde);font-family:inherit;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;padding:7px 15px;cursor:pointer;border-radius:2px;z-index:10000;}
+.lb-close:hover{background:rgba(198,227,72,.12);}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(22,34,39,.85);border:1px solid var(--bdv);color:var(--verde);font-size:22px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:2px;z-index:10000;}
+.lb-nav:hover{background:rgba(198,227,72,.12);}
+.lb-prev{left:10px;}.lb-next{right:10px;}
+.lb-caption{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:1px;color:var(--negro-3);white-space:nowrap;}
+footer{background:var(--negro);border-top:1px solid var(--bd);padding:52px 60px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.footer-div{width:36px;height:1px;background:var(--bdv);margin:3px 0;}
+@media(max-width:900px){
+  .topnav{padding:0 18px;}
+  .wrap{padding:0 22px;}
+  .hero,footer{padding-left:22px;padding-right:22px;}
+  .igallery{gap:6px;}
+  .ifig{max-width:160px;}
+  .ithumb img{height:100px;max-width:160px;}
+}
+  
+/* ─── Mobile screenshot gallery ─── */
+.igallery.mobile-flow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 24px;
+  margin-top: 20px;
+  align-items: flex-start;
+  width: 100%;
+}
+.ifig-mobile {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ifig-mobile .step-label {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--verde);
+  border: 1px solid var(--bdv);
+  padding: 2px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.ifig-mobile .ithumb {
+  width: 100%;
+  aspect-ratio: 9 / 19;
+  cursor: zoom-in;
+  overflow: hidden;
+  border: 1px solid var(--bd);
+  background: rgba(0,0,0,.2);
+  position: relative;
+  line-height: 0;
+  transition: border-color .2s;
+}
+.ifig-mobile .ithumb:hover { border-color: var(--bdv); }
+.ifig-mobile .ithumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  transition: transform .25s;
+}
+.ifig-mobile .ithumb:hover img { transform: scale(1.03); }
+.ifig-mobile figcaption.img-cap {
+  font-size: .72rem;
+  font-weight: 300;
+  color: var(--negro-3);
+  line-height: 1.4;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+}
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-logo" href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="threxio" style="height:30px;width:auto;vertical-align:middle;"/></a>
+  <div class="nav-links">
+    <a href="#sec1">Control cronológico</a>
+    <a href="#sec2">Descuentos y Recargos</a>
+    <a href="#sec3">Permisos exportar</a>
+    <a href="#sec4">Mejoras</a>
+  </div>
+  <span style="font-size:11px;font-weight:300;color:var(--negro-3);letter-spacing:.5px;flex-shrink:0;white-space:nowrap;">Threxio Versión 2.2 · Junio 2026</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-label">Descripción Funcional</div>
+  <h1>Threxio <em>Versión 2.2</em></h1>
+  <p class="hero-sub">Nuevas funcionalidades en estrategia de cobranza, pagos múltiples en dispositivos móviles y mejoras en permisos de exportación.</p>
+  <div class="hero-pills">
+    <a class="hpill hpill-hl" href="#sec1">Control cronológico</a>
+    <a class="hpill" href="#sec2">Descuentos y Recargos</a>
+    <a class="hpill" href="#sec3">Permiso exportar archivo</a>
+    <a class="hpill" href="#sec4">Mejoras</a>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- SEC 01: Control cronológico -->
+  <div class="portal-block" id="sec1">
+    <div class="portal-header">
+      <div>
+        <div class="portal-num">01</div>
+        <h2>Control de pago en orden cronológico</h2>
+        <p>Nuevo parámetro que obliga a pagar siempre la cuenta de cobro más vencida del convenio</p>
+      </div>
+      <div class="portal-count"><strong>3</strong>subsecciones</div>
+    </div>
+    <div class="portal-content">
+      <div class="sum-box">
+        <span class="sum-icon">💡</span>
+        Garantiza que los pagadores cancelen siempre primero la cuenta de cobro con mayor antigüedad de vencimiento dentro del convenio, aplicando en la estrategia de cobranza, el link de pagos, el micrositio y el portal del cliente pagador.
+      </div>
+
+      <div class="acc" id="r1-1">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">1.1 Configuración en estrategia de cobranza</span>
+              <span class="acc-sub">Nuevo parámetro en las reglas de cobro – portal recaudador</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Se incorpora el parámetro <strong style="color:var(--verde)">«Control de pago de facturas en orden de vencimiento»</strong> dentro de las reglas de cobro de la estrategia de cobranza. Al activarlo, el sistema obliga a los pagadores a cancelar siempre primero la cuenta de cobro más vencida del convenio. Aplica exclusivamente a cuentas de cobro.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Parámetro nuevo:</strong> aparece en el paso 1 de configuración de la estrategia, con redistribución visual de los controles existentes.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Texto de ayuda:</strong> <em>«Controla que tus clientes te paguen las facturas en orden cronológico de vencimiento»</em>.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Aplicación inmediata:</strong> al guardar, la restricción aplica en todos los portales de pago asociados a los convenios con esa estrategia.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Scope:</strong> solo cuentas de cobro. No aplica a instrucciones de cobro.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Control de orden de vencimiento – estrategia de cobranza" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Control de orden de vencimiento – estrategia de cobranza</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r1-2">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">1.2 Control cronológico: Link de Pagos y Micrositio</span>
+              <span class="acc-sub">Validación de orden de vencimiento en el proceso de pago</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">El parámetro de control cronológico se aplica en el <strong style="color:var(--verde)">link de pagos</strong> y en el <strong style="color:var(--verde)">micrositio</strong>. Aplica solo a cuentas de cobro.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago individual:</strong> si el pagador intenta pagar una cuenta con vencimiento posterior a otra pendiente más antigua, el sistema bloquea el pago y muestra la alerta informativa.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago múltiple:</strong> si la selección incluye cuentas con vencimientos posteriores a otras pendientes del mismo convenio, el sistema bloquea y muestra la alerta.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Micrositio:</strong> las cuentas se ordenan cronológicamente; las más vencidas con posibilidad de pago aparecen primero. Al pasar al checkout, el sistema valida el orden.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Tooltip en tabla:</strong> la columna de estado indica si un documento está próximo a vencer y cuántos días faltan.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Parámetro inactivo:</strong> el sistema permite selección libre sin restricciones por fecha de vencimiento.</span></li>
+          </ul>
+          <div class="note-box">Casos especiales: facturas con igual fecha de vencimiento se consideran igualmente prioritarias. En pagos parciales múltiples, solo la factura con vencimiento más lejano puede pagarse parcialmente; las demás deben pagarse en su totalidad.</div>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pantalla de alerta – bloqueo de pago en Link de Pagos y Micrositio" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Pantalla de alerta – bloqueo de pago en Link de Pagos y Micrositio</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r1-3">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">1.3 Control cronológico: Portal Cliente Pagador</span>
+              <span class="acc-sub">Orden cronológico y alertas en el portal autenticado del pagador</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">El control de pago cronológico también aplica en el <strong style="color:var(--verde)">portal del cliente pagador autenticado</strong>. En ambos tabs —«Mis facturas» y «Facturas cargadas»— las cuentas se muestran paginadas en orden cronológico de vencimiento.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Orden de tabla:</strong> primero las más vencidas que permiten pago, al final las vencidas o expiradas sin posibilidad de pago.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Columnas fijas:</strong> las tres primeras columnas son Emisión/inicio, Vencimiento/fin y Estado.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Validaciones en «Mis facturas»:</strong> el sistema bloquea la selección de cuentas con vencimiento posterior a otras pendientes más antiguas.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Tab «Facturas guardadas»:</strong> la validación no aplica en el front; se realiza al llegar al link de pagos.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Cambio de tabs:</strong> si hay facturas seleccionadas en «Mis facturas» y el pagador cambia al otro tab, la selección se elimina.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Tabla Mis facturas – columnas Emisión, Vencimiento, Estado y alerta" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Tabla Mis facturas – columnas Emisión, Vencimiento, Estado y alerta</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEC 02: Descuentos y Recargos -->
+  <div class="portal-block" id="sec2">
+    <div class="portal-header">
+      <div>
+        <div class="portal-num">02</div>
+        <h2>Descuentos y Recargos</h2>
+        <p>Configuración de descuentos por pago anticipado y recargos por pago tardío en la estrategia de cobranza</p>
+      </div>
+      <div class="portal-count"><strong>8</strong>subsecciones</div>
+    </div>
+    <div class="portal-content">
+      <div class="sum-box">
+        <span class="sum-icon">💡</span>
+        Permite configurar descuentos y recargos directamente en la estrategia de cobranza. Se aplican automáticamente en documentos de cobro, link de pagos, micrositio, portal pagador, conciliación y exportaciones CSV. Requiere Feature Flag habilitado a nivel de Tenant.
+      </div>
+
+      <div class="acc" id="r2-1">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.1 Configuración en la estrategia de cobranza</span>
+              <span class="acc-sub">Nueva sección de descuentos y recargos en las reglas de cobro</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Se incorpora la capacidad de configurar <strong style="color:var(--verde)">descuentos por pago anticipado</strong> y <strong style="color:var(--verde)">recargos por pago tardío</strong> directamente en la estrategia de cobranza. Aplica exclusivamente a cuentas de cobro y requiere Feature Flag habilitado a nivel de Tenant.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Habilitación:</strong> al marcar la opción en las reglas de cobro, se habilita una nueva sección en la parte inferior de la estrategia.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Plazo en días / indefinido:</strong> si se permite pago después del vencimiento, el plazo delimita el rango máximo para configurar recargos.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Aplicación transversal:</strong> al guardar, se aplica de inmediato a todos los convenios y documentos asociados a esa estrategia.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Valor mínimo:</strong> el resultado nunca es inferior a $2.000 COP. Las comisiones por medio de pago se calculan sobre el valor ya ajustado.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Cambio de estrategia:</strong> al asignar una estrategia diferente a un convenio, se muestra un modal de advertencia sobre los cambios que aplicarán.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Trazabilidad:</strong> toda configuración, modificación o eliminación queda registrada con fecha, usuario y valores.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Panel de configuración expandido – sección Descuentos y Recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Panel de configuración expandido – sección Descuentos y Recargos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Modal de advertencia al cambiar de estrategia en convenio" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Modal de advertencia al cambiar de estrategia en convenio</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-2">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.2 Modal de configuración</span>
+              <span class="acc-sub">Rangos de días, descuentos porcentuales, valor fijo y recargos</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">El modal de configuración está organizado en dos secciones separadas: <strong style="color:var(--verde)">Descuentos</strong> (antes del vencimiento) y <strong style="color:var(--verde)">Recargos</strong> (después del vencimiento). La sección de recargos aparece inhabilitada cuando la estrategia no permite pagos posteriores al vencimiento.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Descuento porcentual:</strong> porcentaje con hasta dos decimales; opcionalmente tope mínimo, tope máximo y monto mínimo de pago.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Descuento valor fijo:</strong> valor en COP y valor mínimo de pago.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Recargo por rangos:</strong> cubre todos los días desde el vencimiento hasta el límite configurado. Los rangos no pueden solaparse ni dejar días sin cubrir.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Recargo diario:</strong> porcentaje o valor fijo por cada día después del vencimiento, hasta el límite de la estrategia.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Regla de tipos:</strong> todos los rangos de una misma configuración deben ser del mismo tipo: porcentual o valor fijo COP.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Historial y auditoría:</strong> cada acción queda registrada con fecha, usuario, tipo, valores y rangos configurados.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Descuentos porcentuales por rangos de días" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Descuentos porcentuales por rangos de días</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Descuentos en valor fijo COP por rangos de días" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Descuentos en valor fijo COP por rangos de días</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Recargos no habilitados" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Recargos no habilitados</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Recargos porcentuales o valor fijo COP por rangos (1)" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Recargos porcentuales o valor fijo COP por rangos (1)</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Recargos porcentuales o valor fijo COP por rangos (2)" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Recargos porcentuales o valor fijo COP por rangos (2)</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Recargo diario porcentual o valor fijo COP" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Recargo diario porcentual o valor fijo COP</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Resumen de configuración de descuentos y recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Resumen de configuración de descuentos y recargos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Alerta al cambiar reglas de pago que deshabiliten recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Alerta al cambiar reglas de pago que deshabiliten recargos</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-3">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.3 Documentos de cobro</span>
+              <span class="acc-sub">Aplicación automática y visualización en el detalle del documento</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Los descuentos y recargos configurados en la estrategia se reflejan directamente en los <strong style="color:var(--verde)">documentos de cobro</strong>, tanto al crearlos como al consultarlos. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Aplicación automática:</strong> al crear un documento, el sistema aplica la configuración de la estrategia asociada al convenio en cuanto se ingresa el valor base.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Carga masiva:</strong> al cargar documentos en lote, el sistema identifica la estrategia de cada uno y aplica la configuración correspondiente.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Recuadro resumen:</strong> cuando un documento tiene descuentos o recargos activos, se muestra un recuadro con rangos, porcentajes y estado actual.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Sin edición directa:</strong> los descuentos y recargos no se pueden modificar en el documento; solo desde la estrategia de cobranza.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Impacto inmediato:</strong> si se desactiva la configuración en la estrategia, los documentos dejan de mostrarla de inmediato. Los pagos ya realizados no se alteran.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Tarjeta resumen de descuentos/recargos en el detalle del documento" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Tarjeta resumen de descuentos/recargos en el detalle del documento</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-4">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.4 Link de Pagos y Comprobante</span>
+              <span class="acc-sub">Valor ajustado, desglose en pop-up y comprobante con nuevos campos</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">El link de pagos muestra los descuentos y recargos aplicables al momento de la transacción, tanto en pagos individuales como múltiples. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago individual:</strong> el valor ajustado se presenta en la barra flotante y el pagador puede consultar el desglose completo en un pop-up.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago múltiple:</strong> la tabla de selección muestra columnas con descuentos/recargos por documento, y el checkout presenta totalizadores.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Comprobante de pago:</strong> incluye los campos: valor documento, descuentos aplicados, recargos aplicados y valor total pagado.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Conciliación:</strong> por cada pago se envía el desglose completo (porcentual, fijo, topes, valor calculado, valor transacción resultante).</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Valores ajustados por descuentos/recargos y pop-up de desglose" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Valores ajustados por descuentos/recargos y pop-up de desglose</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pago con descuentos y comisión por medio de pago" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Pago con descuentos y comisión por medio de pago</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Pago con recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Pago con recargos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Comprobante – valor documento, descuento, recargo, total pagado" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Comprobante – valor documento, descuento, recargo, total pagado</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-5">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.5 Micrositio de Pagos</span>
+              <span class="acc-sub">Columnas de descuento/recargo en tabla de resultados y checkout</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Los descuentos y recargos se muestran en el <strong style="color:var(--verde)">micrositio de pagos</strong>, integrándose en la tabla de resultados de búsqueda y en el proceso de pago. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Tabla de resultados:</strong> nuevas columnas con el detalle de descuentos y recargos aplicables a cada documento encontrado.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago individual:</strong> al continuar al checkout, se aplica la misma experiencia del link de pagos con valor ajustado y pop-up de desglose.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago múltiple:</strong> el checkout presenta los totales de descuentos y recargos por documento, y el valor total ajustado a pagar.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Tabla de resultados con pop-up descuentos/recargos en paso 1" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Tabla de resultados con pop-up descuentos/recargos en paso 1</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Columnas Descuento/Recargo al lado del valor en paso 2" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Columnas Descuento/Recargo al lado del valor en paso 2</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Totalizador de descuentos/recargos en checkout de pagos múltiples" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Totalizador de descuentos/recargos en checkout de pagos múltiples</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-6">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.6 Portal Cliente Pagador</span>
+              <span class="acc-sub">Lista de documentos con columnas D/R y checkout múltiple con totalizadores</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Los descuentos y recargos se muestran directamente en el <strong style="color:var(--verde)">portal del cliente pagador</strong>, tanto en la lista de documentos como durante el proceso de pago. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Lista de documentos:</strong> nuevas columnas con los valores de descuentos y recargos aplicables, calculados sobre el valor original o el saldo pendiente.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago individual:</strong> el link de pagos muestra el valor ajustado, el pop-up de desglose y el comprobante con todos los campos.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Pago múltiple:</strong> el checkout presenta el total de descuentos y recargos, y recalcula el valor total a pagar.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Lista de documentos con columnas de descuento/recargo" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Lista de documentos con columnas de descuento/recargo</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Lista de documentos (continuación)" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Lista de documentos (continuación)</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Checkout múltiple con totalizadores de descuentos y recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Checkout múltiple con totalizadores de descuentos y recargos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Checkout múltiple (continuación)" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Checkout múltiple (continuación)</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-7">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.7 Conciliación, Abonos y Documentos</span>
+              <span class="acc-sub">Campos de descuentos y recargos en tablas y sidemodales del portal recaudador</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">La información de descuentos y recargos está disponible en las secciones de <strong style="color:var(--verde)">conciliación</strong>, <strong style="color:var(--verde)">abonos</strong> y <strong style="color:var(--verde)">documentos de cobro</strong> del portal recaudador. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Conciliación tiempo real e histórico:</strong> dos nuevos campos por transacción: descuentos aplicados y recargos aplicados, con desglose por documento en pagos múltiples.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Lógica de valores:</strong> el valor pagado corresponde al valor original del documento; descuento y recargo se registran en campos separados. El saldo pendiente siempre se calcula sobre el valor original.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Abonos:</strong> el valor de cada abono refleja el monto final ajustado. Los campos de descuentos y recargos aparecen en tablas y sidemodales.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Documentos de cobro y convenios:</strong> las tablas y sidemodales de transacciones también incluyen los nuevos campos.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Conciliación – nuevos campos de descuentos y recargos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Conciliación – nuevos campos de descuentos y recargos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Conciliación – campos D/R (continuación)" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Conciliación – campos D/R (continuación)</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Panel de detalle de transacción – campos Descuento y Recargo" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Panel de detalle de transacción – campos Descuento y Recargo</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Detalle de transacciones en tabla de documentos de cobro" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Detalle de transacciones en tabla de documentos de cobro</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r2-8">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">2.8 Exportación CSV</span>
+              <span class="acc-sub">Columnas Descuento, Recargo y Valor Transacción en conciliación, abonos y documentos</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Los archivos CSV descargables desde conciliación, abonos y documentos de cobro incorporan columnas nuevas de <strong style="color:var(--verde)">descuentos y recargos</strong>. Aplica solo a cuentas de cobro y requiere Feature Flag.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">CSV de conciliación histórica:</strong> columnas de descuentos y recargos por transacción y por documento, ubicadas después del campo de valor pagado. También incluye el campo «valor transacción».</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">CSV de abonos:</strong> columnas adicionales desglosadas por abono, por documento o por transacción según el tipo de descarga.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">CSV de documentos de cobro:</strong> columnas de comisión por medio de pago, descuentos, recargos y valor transacción, después del campo de valor pagado.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="CSV – columnas resaltadas: Descuento, Recargo, Valor Transacción" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">CSV – columnas resaltadas: Descuento, Recargo, Valor Transacción</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEC 03: Permiso exportar -->
+  <div class="portal-block" id="sec3">
+    <div class="portal-header">
+      <div>
+        <div class="portal-num">03</div>
+        <h2>Permiso «Exportar archivo» por convenio</h2>
+        <p>Control granular de exportación de documentos de cobro en Permisos y Privilegios</p>
+      </div>
+      <div class="portal-count"><strong>1</strong>subsección</div>
+    </div>
+    <div class="portal-content">
+      <div class="sum-box">
+        <span class="sum-icon">💡</span>
+        Nuevo permiso en el módulo de Permisos y Privilegios que permite controlar, convenio a convenio, qué usuarios pueden exportar los documentos de cobro. La exportación parcial informa qué convenios se incluyen y cuáles quedan fuera.
+      </div>
+
+      <div class="acc" id="r3-1">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-new">Nuevo</span>
+            <span class="acc-titles">
+              <span class="acc-title">3.1 Permiso «Exportar archivo» de Documentos de Cobro por Convenio</span>
+              <span class="acc-sub">Configuración, exportación parcial, auditoría y seguridad</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Se incorpora el permiso <strong style="color:var(--verde)">«Exportar archivo»</strong> de Documentos de Cobro en el módulo de Permisos y Privilegios del portal recaudador, con granularidad por convenio.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Por convenio:</strong> el permiso se configura convenio a convenio, no de forma global.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Dependencia de visualización:</strong> activar exportación activa automáticamente visualización; desactivar visualización desactiva exportación.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Estado inicial en convenios nuevos:</strong> administrador y visualizador reciben el permiso automáticamente; los demás roles lo tienen deshabilitado.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Despliegue a producción:</strong> todos los usuarios existentes tienen el permiso deshabilitado por defecto.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Exportación parcial:</strong> cuando un usuario solo tiene permisos sobre algunos convenios, el sistema genera el archivo únicamente con los documentos permitidos e informa cuáles quedan excluidos.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Botón exportar:</strong> visible siempre en la tabla general; en la vista de detalle de convenio, solo si el usuario tiene el permiso.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Auditoría:</strong> cada exportación y cada cambio de permisos queda registrado con usuario, fecha y detalle de la acción.</span></li>
+          </ul>
+          <div class="igallery">
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Permisos y Privilegios – permiso Exportar archivo por convenio" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Permisos y Privilegios – permiso Exportar archivo por convenio</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Modal de exportación parcial – convenios incluidos y excluidos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Modal de exportación parcial – convenios incluidos y excluidos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Botón exportar – vista general de documentos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Botón exportar – vista general de documentos</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Botón exportar – detalle de convenio" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Botón exportar – detalle de convenio</figcaption>
+            </figure>
+            <figure class="ifig">
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Modal – documento no exportado por falta de permisos" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Modal – documento no exportado por falta de permisos</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SEC 04: Mejoras -->
+  <div class="portal-block" id="sec4">
+    <div class="portal-header">
+      <div>
+        <div class="portal-num">04</div>
+        <h2>Mejoras</h2>
+        <p>Pago múltiple en dispositivos móviles y comportamiento consistente al desactivar convenios</p>
+      </div>
+      <div class="portal-count"><strong>2</strong>subsecciones</div>
+    </div>
+    <div class="portal-content">
+      <div class="sum-box">
+        <span class="sum-icon">💡</span>
+        Se habilita el pago múltiple en móviles para el micrositio y links por notificación, y se corrige el comportamiento al desactivar convenios en el flujo de «Buscar Facturas» del portal pagador.
+      </div>
+
+      <div class="acc" id="r4-1">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-imp">Mejora</span>
+            <span class="acc-titles">
+              <span class="acc-title">4.1 Pago múltiple en dispositivos móviles</span>
+              <span class="acc-sub">Micrositio y links de pago múltiple por email o WhatsApp</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Se habilita la funcionalidad de <strong style="color:var(--verde)">pago múltiple en dispositivos móviles</strong> para el micrositio de pagos y los links de pago múltiple enviados por notificación.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Micrositio móvil:</strong> el pagador puede buscar por convenio y referencias, seleccionar uno o varios documentos y pagar en una sola transacción.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Links por email/WhatsApp:</strong> al abrir el enlace desde el celular, el sistema precarga todos los documentos de la notificación. El pagador puede ajustar la selección.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Edición de valores:</strong> en ambos canales, el pagador puede editar los valores a pagar según las reglas de la estrategia de cobranza activa.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Flujo continuo:</strong> el proceso de pago continúa normalmente desde el link de pago múltiple, igual que en desktop.</span></li>
+          </ul>
+          <div class="note-box">Las imágenes muestran el flujo completo en móvil: selección de documentos → checkout → confirmación de pago.</div>
+                    <div class="igallery mobile-flow">
+            <figure class="ifig-mobile">
+              <div class="step-label">Paso 1</div>
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Documentos seleccionados – tabla de pago múltiple en móvil" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Documentos seleccionados – tabla de pago múltiple en móvil</figcaption>
+            </figure>
+            <figure class="ifig-mobile">
+              <div class="step-label">Paso 2</div>
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Checkout móvil – resumen de convenio y selección de medio de pago" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Checkout móvil – resumen de convenio y selección de medio de pago</figcaption>
+            </figure>
+            <figure class="ifig-mobile">
+              <div class="step-label">Paso 3</div>
+              <div class="ithumb" onclick="openLb(this)">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Comprobante de pago – N° comprobante, estado y documentos pagados" loading="lazy"/>
+                <span class="zoom-hint">↗</span>
+              </div>
+              <figcaption class="img-cap">Comprobante de pago – N° comprobante, estado y documentos pagados</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc" id="r4-2">
+        <button class="acc-btn" onclick="toggle(this)">
+          <span class="acc-left">
+            <span class="atag tag-imp">Mejora</span>
+            <span class="acc-titles">
+              <span class="acc-title">4.2 Comportamiento consistente al desactivar convenios</span>
+              <span class="acc-sub">Flujo «Buscar Facturas» en el portal del cliente pagador</span>
+            </span>
+          </span>
+          <span class="acc-chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="acc-body">
+          <p class="itext">Cuando un recaudador desactiva la visibilidad de un convenio en el portal del cliente pagador, el cambio ahora aplica de forma <strong style="color:var(--verde)">consistente también en el flujo de «Buscar Facturas»</strong>.</p>
+          <ul class="dots">
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Comportamiento anterior:</strong> las facturas de un convenio desactivado seguían apareciendo en «Buscar Factura», Inicio, Histórico de pagos y Mis transacciones.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Comportamiento correcto:</strong> al desactivar un convenio, ninguna de sus facturas es visible ni operable desde ningún punto del portal pagador.</span></li>
+            <li><span class="dot"></span><span><strong style="color:var(--blanco)">Alcance de la mejora:</strong> extiende la lógica existente al flujo de «Buscar Facturas», que no había sido contemplado en el desarrollo original.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end wrap -->
+
+<footer>
+  <div class="footer-div"></div>
+  <p style="font-size:.8rem;font-weight:300;color:var(--negro-3);">Descripción Funcional — Threxio Versión 2.2 · Junio 2026</p>
+  <p style="font-size:.72rem;font-weight:300;color:var(--negro-2);">Para el Equipo de Producto</p>
+</footer>
+
+<div class="lightbox" id="lb" onclick="if(event.target===this)closeLb()">
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt=""/>
+  </div>
+  <button class="lb-close" onclick="closeLb()">Cerrar</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1,event)">&#8249;</button>
+  <button class="lb-nav lb-next" onclick="lbNav(1,event)">&#8250;</button>
+  <span class="lb-caption" id="lb-cap"></span>
+</div>
+
+<script>
+
+function toggle(btn){
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+let lbImgs=[], lbIdx=0;
+function openLb(thumb){
+  const section = thumb.closest('.acc-body') || document;
+  const thumbs = Array.from(section.querySelectorAll('.ithumb'));
+  lbImgs = thumbs.map(t=>({src:t.querySelector('img').src, alt:t.querySelector('img').alt}));
+  lbIdx = thumbs.indexOf(thumb);
+  if(lbIdx<0) lbIdx=0;
+  showLb();
+  document.getElementById('lb').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function showLb(){
+  document.getElementById('lb-img').src = lbImgs[lbIdx].src;
+  document.getElementById('lb-img').alt = lbImgs[lbIdx].alt;
+  document.getElementById('lb-cap').textContent = lbImgs[lbIdx].alt + '  ·  ' + (lbIdx+1) + ' / ' + lbImgs.length;
+}
+function closeLb(){
+  document.getElementById('lb').classList.remove('active');
+  document.body.style.overflow='';
+}
+function lbNav(dir,e){
+  if(e) e.stopPropagation();
+  lbIdx=(lbIdx+dir+lbImgs.length)%lbImgs.length;
+  showLb();
+}
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lb').classList.contains('active'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowRight')lbNav(1);
+  if(e.key==='ArrowLeft')lbNav(-1);
+});
+
+</script>
+
+</body>
+</html>
